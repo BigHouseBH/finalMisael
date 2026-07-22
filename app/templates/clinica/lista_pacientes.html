@@ -16,6 +16,7 @@
         <th>Email</th>
         <th>Teléfono</th>
         <th>Obra Social</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -26,10 +27,14 @@
         <td>{{ paciente.email }}</td>
         <td>{{ paciente.telefono }}</td>
         <td>{{ paciente.obra_social|default:"Sin asignar" }}</td>
+
+        <td>
+          <a href="{% url 'app:historial' paciente.id %}" class="btn btn-sm btn-outline-info">Historial</a>      
+        </td>
       </tr>
       {% empty %}
       <tr>
-        <td colspan="5" class="text-center text-muted">No hay pacientes cargados.</td>
+        <td colspan="6" class="text-center text-muted">No hay pacientes cargados.</td>
       </tr>
       {% endfor %}
     </tbody>

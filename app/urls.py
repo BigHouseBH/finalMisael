@@ -2,7 +2,7 @@
 
 from django.urls import path
 from . import views
-
+from .views_historial import HistorialView
 app_name = "app"
 
 urlpatterns = [
@@ -16,7 +16,7 @@ urlpatterns = [
     path("ausencias/", views.ListaAusenciasView.as_view(), name="lista_ausencias"),
     path("ausencias/nueva/", views.NuevaAusenciaView.as_view(), name="nueva_ausencia"),
     path("ausencias/<int:pk>/eliminar/", views.EliminarAusenciaView.as_view(), name="eliminar_ausencia"),
-
+    path('paciente/<int:pk>/historial/', HistorialView.as_view(), name='historial'),
     # --- Flujo de pedir turno ---
     path(
         "especialidades/",

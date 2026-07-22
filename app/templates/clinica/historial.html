@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Historial de {{ paciente.nombre }} — TurnoYa{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4">Historial de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+    <span class="badge bg-info">DNI: {{ paciente.dni }}</span>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+        <th>Fecha y hora</th>
+        <th>Médico</th>
+        <th>Especialidad</th>
+        <th>Estado</th>
+        <th>Observaciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for turno in turnos %}
+        <tr>
+        <td>{{ turno.fecha_hora|date:"d/m/Y H:i" }}</td>
+        <td>{{ turno.medico.usuario.get_full_name|default:turno.medico.usuario.username }}</td>
+        <td>{{ turno.medico.especialidad.nombre|default:"Sin especialidad" }}</td>
+        <td>
+            <span class="badge {% if turno.estado == 'CONFIRMADO' %}bg-success{% elif turno.estado == 'PENDIENTE' %}bg-warning{% elif turno.estado == 'CANCELADO' %}bg-danger{% else %}bg-secondary{% endif %}">
+            {{ turno.estado }}
+            </span>
+        </td>
+        <td>{{ turno.observaciones|default:"Sin observaciones" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+        <td colspan="5" class="text-center text-muted">No hay turnos para este paciente.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'app:lista_pacientes' %}" class="btn btn-secondary">← Volver</a>
+</div>
+{% endblock %}
