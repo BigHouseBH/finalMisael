@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils import timezone
 from .medico import Medico
 from .paciente import Paciente
 
@@ -68,8 +70,6 @@ class Turno(models.Model):
         if estado not in dict(cls.ESTADOS):
             errors.append("El estado del turno no es válido.")
 
-        # Defensa en profundidad: no permitir dos turnos activos del mismo
-        # médico en el mismo horario (un turno cancelado libera el espacio).
         if medico and fecha_hora:
             query = cls.objects.filter(
                 medico=medico, fecha_hora=fecha_hora
@@ -122,27 +122,70 @@ class Turno(models.Model):
     # --- Transiciones de estado (usadas por las vistas) ---
 
     def aceptar(self):
-        """El médico confirma un turno pendiente."""
         self.estado = self.CONFIRMADO
         self.save()
 
     def rechazar(self):
-        """El médico rechaza un turno pendiente.
-
-        Reutiliza la transición a 'cancelado' (no hay estado 'rechazado').
-        """
         self.estado = self.CANCELADO
         self.save()
 
     def cancelar(self):
-        """El paciente cancela un turno propio."""
         self.estado = self.CANCELADO
         self.save()
 
     def marcar_asistencia(self, asistio=True):
-        """Marca el turno como atendido o no asistió."""
         if asistio:
             self.estado = self.ATENDIDO
         else:
             self.estado = self.NO_ASISTIO
         self.save()
+
+    def acciones_posibles(self):
+        hoy = timezone.now().date()
+        acciones = {}
+
+        if self.estado == self.PENDIENTE:
+            acciones = {
+                'aceptar': {
+                    'label': 'Aceptar',
+                    'clase': 'btn-success',
+                    'url': reverse('app:aceptar_turno', args=[self.id]),
+                    'disabled': False
+                },
+                'rechazar': {
+                    'label': 'Rechazar',
+                    'clase': 'btn-danger',
+                    'url': reverse('app:rechazar_turno', args=[self.id]),
+                    'disabled': False
+                }
+            }
+        elif self.estado == self.CONFIRMADO:
+            if self.fecha_hora.date() <= hoy:
+                acciones = {
+                    'asistio': {
+                        'label': 'Asistio',
+                        'clase': 'btn-success',
+                        'url': reverse('app:registrar_asistencia', args=[self.id]),
+                        'disabled': False,
+                        'post_data': {'asistio': 'true'}
+                    },
+                    'no_asistio': {
+                        'label': 'No asistio',
+                        'clase': 'btn-danger',
+                        'url': reverse('app:registrar_asistencia', args=[self.id]),
+                        'disabled': False,
+                        'post_data': {'asistio': 'false'}
+                    }
+                }
+            else:
+                acciones = {
+                    'cancelar': {
+                        'label': 'Cancelar',
+                        'clase': 'btn-warning',
+                        'url': reverse('app:cancelar_turno', args=[self.id]),
+                        'disabled': False
+                    }
+                }
+    
+
+        return acciones
