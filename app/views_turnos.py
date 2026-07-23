@@ -267,7 +267,7 @@ class CancelarTurnoView(LoginRequiredMixin, TemplateView):
         if turno is None:
             messages.error(request, "No podés cancelar este turno.")
             return redirect("app:lista_turnos")
-        if turno.estado in [Turno.CANCELADO, Turno.FINALIZADO]:
+        if turno.estado in [Turno.CANCELADO, Turno.ATENDIDO, Turno.NO_ASISTIO]:
             messages.error(request, "Este turno no se puede cancelar.")
             return redirect("app:lista_turnos")
         return super().get(request, *args, **kwargs)
@@ -277,9 +277,48 @@ class CancelarTurnoView(LoginRequiredMixin, TemplateView):
         if turno is None:
             messages.error(request, "No podés cancelar este turno.")
             return redirect("app:lista_turnos")
-        if turno.estado in [Turno.CANCELADO, Turno.FINALIZADO]:
+        if turno.estado in [Turno.CANCELADO, Turno.ATENDIDO, Turno.NO_ASISTIO]:
             messages.error(request, "Este turno no se puede cancelar.")
             return redirect("app:lista_turnos")
         turno.cancelar()
         messages.success(request, "Turno cancelado.")
         return redirect("app:lista_turnos")
+        
+    
+    
+class RegistrarAsistenciaView(LoginRequiredMixin, View):
+    """Permite al médico o staff registrar si el paciente asistió o no.
+    SOLO para turnos con fecha_hora <= hoy (mismo día o anterior).
+    """
+
+    def post(self, request, pk):
+        turno = get_object_or_404(Turno, pk=pk)
+        asistio = request.POST.get('asistio') == 'true'
+        
+        # Verificar permisos: solo el médico asignado o staff
+        if not (request.user.is_staff or turno.medico.usuario_id == request.user.id):
+            messages.error(request, "No tenés permiso para registrar asistencia de este turno.")
+            return redirect('app:lista_turnos')
+        
+        # 👇 VALIDACIÓN: Solo se puede marcar si la fecha ya pasó o es hoy
+        hoy = timezone.now().date()
+        fecha_turno = turno.fecha_hora.date()
+        
+        if fecha_turno > hoy:
+            messages.error(request, "No se puede registrar asistencia para turnos futuros.")
+            return redirect('app:lista_turnos')
+        
+        # Solo se puede marcar si el turno está confirmado
+        if turno.estado != Turno.CONFIRMADO:
+            messages.error(request, "Solo se puede registrar asistencia para turnos confirmados.")
+            return redirect('app:lista_turnos')
+        
+        # Marcar asistencia
+        turno.marcar_asistencia(asistio)
+        
+        if asistio:
+            messages.success(request, "Turno marcado como atendido.")
+        else:
+            messages.success(request, "Turno marcado como no asistió.")
+        
+        return redirect('app:lista_turnos')

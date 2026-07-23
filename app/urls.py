@@ -27,5 +27,5 @@ urlpatterns = [
     path("turnos/<int:pk>/aceptar/", AceptarTurnoView.as_view(), name="aceptar_turno"),
     path("turnos/<int:pk>/rechazar/", RechazarTurnoView.as_view(), name="rechazar_turno"),
     path("turnos/<int:pk>/cancelar/", CancelarTurnoView.as_view(), name="cancelar_turno"),
-
+    path('turno/<int:pk>/registrar-asistencia/', RegistrarAsistenciaView.as_view(), name='registrar_asistencia'),
 ]

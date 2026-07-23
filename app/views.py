@@ -158,8 +158,9 @@ class ListaTurnosView(LoginRequiredMixin, ListView):
         user = self.request.user
         context["es_medico"] = Medico.objects.filter(usuario=user).exists()
         context["mi_paciente_id"] = (
-            Paciente.objects.filter(usuario=user).values_list("id", flat=True).first()
+        Paciente.objects.filter(usuario=user).values_list("id", flat=True).first()
         )
+        context["hoy"] = timezone.now().date()
         return context
 
 

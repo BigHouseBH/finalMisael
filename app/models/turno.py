@@ -10,13 +10,22 @@ class Turno(models.Model):
     PENDIENTE = "pendiente"
     CONFIRMADO = "confirmado"
     CANCELADO = "cancelado"
-    FINALIZADO = "finalizado"
+    ATENDIDO = "atendido"
+    NO_ASISTIO = "no_asistio"
+    
     ESTADOS = [
         (PENDIENTE, "Pendiente"),
         (CONFIRMADO, "Confirmado"),
         (CANCELADO, "Cancelado"),
-        (FINALIZADO, "Finalizado"),
+        (ATENDIDO, "Atendido"),
+        (NO_ASISTIO, "No asistió"),
     ]
+    
+    asistio = models.BooleanField(
+        null=True,
+        blank=True,
+        help_text="True si el paciente asistió, False si no, Null si aún no se sabe"
+    )
 
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -45,7 +54,7 @@ class Turno(models.Model):
 
     @classmethod
     def validate(cls, medico, paciente, fecha_hora, motivo,
-                 estado=PENDIENTE, observaciones="", instance=None):
+        estado=PENDIENTE, observaciones="", instance=None):
         errors = []
 
         if not medico:
@@ -91,7 +100,7 @@ class Turno(models.Model):
         return turno, []
 
     def update(self, medico, paciente, fecha_hora, motivo,
-               estado=None, observaciones=None):
+        estado=None, observaciones=None):
         estado = estado if estado is not None else self.estado
         observaciones = observaciones if observaciones is not None else self.observaciones
 
@@ -130,7 +139,10 @@ class Turno(models.Model):
         self.estado = self.CANCELADO
         self.save()
 
-    def finalizar(self):
-        """Marca el turno como atendido/finalizado."""
-        self.estado = self.FINALIZADO
+    def marcar_asistencia(self, asistio=True):
+        """Marca el turno como atendido o no asistió."""
+        if asistio:
+            self.estado = self.ATENDIDO
+        else:
+            self.estado = self.NO_ASISTIO
         self.save()

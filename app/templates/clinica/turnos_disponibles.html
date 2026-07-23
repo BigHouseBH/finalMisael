@@ -20,7 +20,7 @@
     <div class="col-6 col-sm-4 col-md-3 col-lg-2">
       {% if dia.disponible %}
         <a href="?fecha={{ dia.fecha_str }}"
-           class="btn btn-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+          class="btn btn-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
           <span class="fw-bold">{{ dia.nombre_dia }}</span>
           <small>{{ dia.cantidad }} turno{{ dia.cantidad|pluralize }}</small>
         </a>

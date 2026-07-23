@@ -31,40 +31,68 @@
         <td>Dr/a. {{ turno.medico.apellido }}, {{ turno.medico.nombre }}</td>
         <td><code>{{ turno.medico.especialidad }}</code></td>
         <td>
-          <span class="badge
-            {% if turno.estado == 'pendiente' %}bg-warning text-dark
-            {% elif turno.estado == 'confirmado' %}bg-success
-            {% elif turno.estado == 'cancelado' %}bg-danger
-            {% elif turno.estado == 'finalizado' %}bg-secondary
-            {% endif %}">
-            {{ turno.get_estado_display }}
-          </span>
+    <span class="badge
+      {% if turno.estado == 'pendiente' %}bg-warning text-dark
+      {% elif turno.estado == 'confirmado' %}bg-success
+      {% elif turno.estado == 'cancelado' %}bg-danger
+      {% elif turno.estado == 'atendido' %}bg-info
+      {% elif turno.estado == 'no_asistio' %}bg-secondary
+      {% else %}bg-secondary
+      {% endif %}">
+      {{ turno.get_estado_display }}
+    </span>
+      
+      <td>
+  <div class="d-flex flex-column gap-1">
+    {% if turno.estado == 'pendiente' %}
+      {# Médico asignado o admin: aceptan o rechazan la solicitud #}
+      {% if es_medico or user.is_staff %}
+        <form method="post" action="{% url 'app:aceptar_turno' turno.pk %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success btn-sm w-100">Aceptar</button>
+        </form>
+        <form method="post" action="{% url 'app:rechazar_turno' turno.pk %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger btn-sm w-100">Rechazar</button>
+        </form>
+      {% endif %}
+      {# Paciente dueño: da de baja su propia solicitud #}
+      {% if turno.paciente_id == mi_paciente_id %}
+        <a href="{% url 'app:cancelar_turno' turno.pk %}" class="btn btn-outline-secondary btn-sm w-100">Cancelar</a>
+      {% endif %}
+    
+    {% elif turno.estado == 'confirmado' %}
+      {# Turno confirmado: el dueño o el admin pueden darlo de baja #}
+      {% if turno.paciente_id == mi_paciente_id or user.is_staff %}
+        <a href="{% url 'app:cancelar_turno' turno.pk %}" class="btn btn-outline-secondary btn-sm w-100">Cancelar</a>
+      {% endif %}
+      {# Botones de asistencia para médicos y admin #}
+      {% if es_medico or user.is_staff %}
+        {% if turno.fecha_hora.date <= hoy %}
+          <form method="post" action="{% url 'app:registrar_asistencia' turno.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" name="asistio" value="true" class="btn btn-success btn-sm w-100">Asistió</button>
+          </form>
+          <form method="post" action="{% url 'app:registrar_asistencia' turno.pk %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" name="asistio" value="false" class="btn btn-danger btn-sm w-100">No asistió</button>
+          </form>
+        {% else %}
+          <span class="text-muted small d-block">turno futuro</span>
+        {% endif %}
+      {% endif %}
+    
+    {% elif turno.estado == 'atendido' or turno.estado == 'no_asistio' %}
+      <span class="text-muted small d-block">Finalizado</span>
+    
+    {% elif turno.estado == 'cancelado' %}
+      <span class="text-muted small d-block">Cancelado</span>
+    {% endif %}
+  </div>
+</td>
+
         </td>
-        <td>{{ turno.motivo }}</td>
-        <td>
-          {% if turno.estado == 'pendiente' %}
-            {# Médico asignado o admin: aceptan o rechazan la solicitud #}
-            {% if es_medico or user.is_staff %}
-              <form method="post" action="{% url 'app:aceptar_turno' turno.pk %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success btn-sm">Aceptar</button>
-              </form>
-              <form method="post" action="{% url 'app:rechazar_turno' turno.pk %}" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger btn-sm">Rechazar</button>
-              </form>
-            {% endif %}
-            {# Paciente dueño: da de baja su propia solicitud #}
-            {% if turno.paciente_id == mi_paciente_id %}
-              <a href="{% url 'app:cancelar_turno' turno.pk %}" class="btn btn-outline-secondary btn-sm">Cancelar</a>
-            {% endif %}
-          {% elif turno.estado == 'confirmado' %}
-            {# Turno confirmado: el dueño o el admin pueden darlo de baja #}
-            {% if turno.paciente_id == mi_paciente_id or user.is_staff %}
-              <a href="{% url 'app:cancelar_turno' turno.pk %}" class="btn btn-outline-secondary btn-sm">Cancelar</a>
-            {% endif %}
-          {% endif %}
-        </td>
+
       </tr>
       {% empty %}
       <tr>

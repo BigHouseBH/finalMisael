@@ -26,10 +26,17 @@
         <td>{{ turno.medico.usuario.get_full_name|default:turno.medico.usuario.username }}</td>
         <td>{{ turno.medico.especialidad.nombre|default:"Sin especialidad" }}</td>
         <td>
-            <span class="badge {% if turno.estado == 'CONFIRMADO' %}bg-success{% elif turno.estado == 'PENDIENTE' %}bg-warning{% elif turno.estado == 'CANCELADO' %}bg-danger{% else %}bg-secondary{% endif %}">
-            {{ turno.estado }}
-            </span>
-        </td>
+        <span class="badge
+            {% if turno.estado == 'pendiente' %}bg-warning text-dark
+            {% elif turno.estado == 'confirmado' %}bg-success
+            {% elif turno.estado == 'cancelado' %}bg-danger
+            {% elif turno.estado == 'atendido' %}bg-info
+            {% elif turno.estado == 'no_asistio' %}bg-secondary
+            {% else %}bg-secondary
+            {% endif %}">
+            {{ turno.get_estado_display }}
+        </span>
+    </td>
         <td>{{ turno.observaciones|default:"Sin observaciones" }}</td>
         </tr>
         {% empty %}
