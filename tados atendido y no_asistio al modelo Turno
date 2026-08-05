@@ -1,0 +1,689 @@
+[33mcommit 75a7022f18ea92cd2685f34395af9ddbcf0b1e5e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: BigHouseBH <misaelgabrielcasagrande@gmail.com>
+Date:   Thu Jul 23 12:50:39 2026 -0300
+
+    feat: agregar registro de asistencia para médicos y mejorar UI- Agregar estados 'atendido' y 'no_asistio' al modelo Turno
+
+[33mcommit 259b5395e6955e170af95d393376566f488b1a43[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: BigHouseBH <misaelgabrielcasagrande@gmail.com>
+Date:   Wed Jul 22 16:36:16 2026 -0300
+
+    refactor: modularizar vistas en archivos separados
+    
+    - views_turnos.py: flujo de pedir turnos (SeleccionarEspecialidadView, MedicosDisponiblesView, TurnosDisponiblesView, ConfirmarTurnoView, AceptarTurnoView, RechazarTurnoView, CancelarTurnoView)
+    
+    - views_historial.py: historial de pacientes (HistorialView)
+    
+    - views.py: vistas principales (HomeView, ListaMedicosView, ListaTurnosView, RegistroUsuarioView, ListaPacientesView, ListaAusenciasView, NuevaAusenciaView, EliminarAusenciaView, DetalleMedicoView, PerfilUsuarioView) + mixins (PerfilPacienteRequiredMixin) + funciones auxiliares (slots_libres_de_medico, _slots_de_franja) + constantes (PASO_TURNO_MIN, DIAS_CALENDARIO)
+    
+    - urls.py: importaciones actualizadas para usar los nuevos módulos
+    
+    - Corregir importaciones faltantes en views_turnos.py (ListView, TemplateView, CreateView)
+    
+    - Eliminar duplicado de DIAS_CALENDARIO en views_turnos.py
+
+[33mcommit 1d562a19e7bc3e4b0d696eb7d8669c88cead9698[m
+Author: BigHouseBH <misaelgabrielcasagrande@gmail.com>
+Date:   Wed Jul 22 11:35:54 2026 -0300
+
+    feat(admin): agregar historial de pacientes para administradores y posteriormente para médicos
+
+[33mcommit a29e381c36a896643d82c8cabd4a3a206f1d443a[m[33m ([m[1;32mopcionales-recordatorios-historial[m[33m)[m
+Merge: 6493f6f b5d4b22
+Author: martin2716 <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 20:59:58 2026 -0300
+
+    Merge pull request #15 from martin2716/rama-martin-v5
+    
+    Rama martin v5
+
+[33mcommit b5d4b22c9bd34c08152c972716ce581429ce8292[m[33m ([m[1;31morigin/rama-martin-v5[m[33m)[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 20:05:42 2026 -0300
+
+    alinea disponibilidad de medicos con el calendario de turnos
+
+[33mcommit 34d97881f8707704e0c333421fc76063a5e07938[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 19:18:25 2026 -0300
+
+    mejora flujo de turnos y validacion de ausencias
+
+[33mcommit f4ac0947c2529a4cef530a9c9842ad105b3f86d8[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 15:19:23 2026 -0300
+
+    avisa al usuario si su perfil esta incompleto para pedir turnos
+
+[33mcommit 99d147ed975c769add0d4920840b35e1f69bc66c[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 14:47:47 2026 -0300
+
+    Revert "agrega paginas de error 404 y 500 personalizadas"
+    
+    This reverts commit 78f49508235ce6ecb9d0a9ecb9446a8d560bfe37.
+
+[33mcommit 78f49508235ce6ecb9d0a9ecb9446a8d560bfe37[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 14:08:27 2026 -0300
+
+    agrega paginas de error 404 y 500 personalizadas
+
+[33mcommit bade3009999b6a7dad31132150945be40ae19723[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 13:49:22 2026 -0300
+
+    corrige enlace de perfil en home
+
+[33mcommit 6493f6fc15788c0677c0d62aa6d9338252b80d96[m
+Merge: 5b395cc 1cffccc
+Author: martin2716 <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 13:24:21 2026 -0300
+
+    Merge pull request #14 from martin2716/rama-martin-v4
+    
+    Tests de vistas, ajustes de UI y documentación
+
+[33mcommit 1cffccceb5a6790c6f68e4516888671f5367801b[m[33m ([m[1;31morigin/rama-martin-v4[m[33m)[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 13:18:47 2026 -0300
+
+    actualiza README con estado real del proyecto
+
+[33mcommit b9e858bd69301d138048947abe7b42c53db2b990[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 13:11:40 2026 -0300
+
+    reemplaza filtro de medicos con boton para evitar JS inline
+
+[33mcommit b3be053d81669a044624386cea58ec23ba14509a[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 12:51:30 2026 -0300
+
+    agrega tests de vistas y permisos
+
+[33mcommit 8e90259bc9d09a15fb189c205e2c1b31f11c605e[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 12:25:23 2026 -0300
+
+    ajusta diagnostico del proyecto
+
+[33mcommit 5b395cc9020c8421dbc3bbcda6119a930436e0c7[m
+Merge: eb00e44 cca9595
+Author: martin2716 <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 10:54:43 2026 -0300
+
+    Merge pull request #13 from martin2716/rama-martin-v3
+    
+    Ajustes de documentación, accesos y panel admin
+
+[33mcommit cca9595e6a3130ba969bd6bd80dd84a0370f0977[m[33m ([m[1;31morigin/rama-martin-v3[m[33m)[m
+Merge: b58d358 eb00e44
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 00:52:18 2026 -0300
+
+    Merge remote-tracking branch 'origin/main' into rama-martin-v3
+
+[33mcommit b58d358068f5c30aa1788c049f326f44bdbfd9e2[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 00:51:59 2026 -0300
+
+    ajusta home, fixtures y branding admin
+
+[33mcommit ea2560f867816033f514e78a52d90845305f3dfa[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 00:44:09 2026 -0300
+
+    ajusta documentacion de usabilidad y diagnostico
+
+[33mcommit 153302330015a463822b95ea349c005bfa7ec827[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 00:38:37 2026 -0300
+
+    actualiza guia del proyecto
+
+[33mcommit 51fcf5bea9908052466e10d74341c8ff41a8100e[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 30 00:14:20 2026 -0300
+
+    fix views
+
+[33mcommit eb00e444252be48464eae8d1e2bcd447b4bdc758[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 29 22:38:03 2026 -0300
+
+    fix: modificado el como se ven los forms, filtrando por medico en caso de que sea un medico y por admin dando a elegir el medico en especifico
+
+[33mcommit 0f7f3ffb46252fcf44c1fa7785c772ffe01a6246[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 29 22:37:10 2026 -0300
+
+    feat: ahora los grupos se añaden por defecto al cargar de cero el proyecto
+
+[33mcommit df46a3e102ca8fb38d516f2dc1070d91e5bf1fb2[m
+Merge: 6c4cc43 4c9670e
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Mon Jun 29 19:02:09 2026 -0300
+
+    Merge pull request #12 from martin2716/feat/flujo-pedir-turno
+    
+    Feat/flujo pedir turno
+
+[33mcommit 4c9670eb7934293bf91d25cf49adaaef77fc2305[m[33m ([m[1;31morigin/feat/flujo-pedir-turno[m[33m)[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 29 18:55:34 2026 -0300
+
+    feat: añadida ultimos datos al md de como quedo el proyecto hasta ahora
+
+[33mcommit dd5359769e4c2ca91595d05d6f5f1d586d8a1ded[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 29 18:40:13 2026 -0300
+
+    fix: corregidos y agregados test  anotados faltantes en el md
+
+[33mcommit e0ee4ef02642fe377cc9bedbdd397f784e638282[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 29 18:32:55 2026 -0300
+
+    feat: refactorizacion necesaria para poder juntar la rama merge que contenia los turnos, se debio arreglar varias cosas para integrarla ya que a pesar de que contenia la funcionalidad principal, no estaba al dia con main, y al quedar muy desfasada daba problemas hacer el merge sencillo
+
+[33mcommit 6c4cc434cc4711c8647e9a724295d5228b2797ef[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:42:08 2026 -0300
+
+    ultimos cambios
+
+[33mcommit c16a9cc19a9a0c86ad4ab119ec37f221a1a2965f[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:39:17 2026 -0300
+
+    fix: mejoras visuales a los forms de iniciar sesion, crear usuario y editar perfil
+
+[33mcommit 9beea982c5e5b8b5e8bf10fdaf67227d5a57cda7[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:23:45 2026 -0300
+
+    fix: añadido cambio para la redireccion a la edicion de perfil y borrada view que no se va a usar
+
+[33mcommit d0afad1e7180bfb5f5d80cad4395ea2dfe73dcae[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:16:58 2026 -0300
+
+    feat: añadido mensaje general de error
+
+[33mcommit 354938f52b5ba4ac0e3fd149b746bdf6354649fc[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:16:05 2026 -0300
+
+    fix: corregido la view a la que hace redireccion
+
+[33mcommit e49b030fdc800a5bffd3f713712b98d455b9ba03[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:13:00 2026 -0300
+
+    fix: añadidas restricciones por expresiones regulares a los campos
+
+[33mcommit 251eb0a18201f208ee3d6dc7c7904247f0e01ed9[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 22:11:57 2026 -0300
+
+    fix: añadidas restricciones por restricciones regulares
+
+[33mcommit bd342bc17e4f0a8689765581dbd49caabc74bd5b[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 21:14:58 2026 -0300
+
+    fix: arreglado el form y los mensajes de error, ahora el email es obligatorio
+
+[33mcommit 52c720dcbea275ba72060abdfedab3e5c10b32d8[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:49:06 2026 -0300
+
+    fix: añadida restriccion para que no se cree paciente sin email
+
+[33mcommit df3cc4f9700a70d68e8d3c5f70697e381ed8ad34[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:37:32 2026 -0300
+
+    feat: añadidas las ausencias al navbar
+
+[33mcommit 20a9291ef67146ef391c83f1951c6f4099afad21[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:34:47 2026 -0300
+
+    fix: renovada la forma en que se importaban los formularios debido a la nueva organizacion
+
+[33mcommit cf28d7995f65dc1de8393831b5ff223d5d6c1c40[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:33:51 2026 -0300
+
+    fix: cambios en la devolucion al fallar al llenar al form
+
+[33mcommit 46d24e58705888ef38a466e381ace238ae8210c7[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:33:02 2026 -0300
+
+    feat: reformulada la nueva version del formulario para que los usuarios creados sean Pacientes
+
+[33mcommit 2c4bd17d9096ab8f99c2a8dd31176b70be80a593[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:30:32 2026 -0300
+
+    feat: añadida guia de usabilidad del proyecto
+
+[33mcommit 5f45f2752c07ad2d957983a7faade66ee39858a8[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 20:29:26 2026 -0300
+
+    fix: añadida nueva regla
+
+[33mcommit 67ec9b2c0695a78c0b23fb0085722fba33f81f9b[m
+Merge: be85070 67d8f39
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Sun Jun 28 14:19:47 2026 -0300
+
+    Merge pull request #11 from martin2716/feat/ajustes-y-ausencias
+    
+    Feat/ajustes y ausencias
+
+[33mcommit 67d8f39160c2be9543b84c3c7e2591d0aa51ad19[m[33m ([m[1;31morigin/feat/ajustes-y-ausencias[m[33m)[m
+Merge: ae9b898 be85070
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 14:17:22 2026 -0300
+
+    Merge branch 'main' into feat/ajustes-y-ausencias
+
+[33mcommit be8507099bb485e934d1ef68426b9a9fb68f0dde[m
+Merge: 63f572a c45bdaf
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Sun Jun 28 14:08:51 2026 -0300
+
+    Merge pull request #10 from martin2716/feature/martin-admin
+    
+    Feature/martin admin
+
+[33mcommit ae9b898a5959bdd6c1cecb4470845b5a0b680dbf[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun Jun 28 13:47:14 2026 -0300
+
+    feat: añadida la vista detallada del medico, la misma es accesible a traves de la lista de medicos, dando click en el nombre, revisar mejora de usabilidad más adelante
+
+[33mcommit c45bdaf6e7e5c20ab4a5f795640a5df47d820726[m[33m ([m[1;31morigin/feature/martin-admin[m[33m)[m
+Merge: fa0bf55 63f572a
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Tue Jun 23 20:56:33 2026 -0300
+
+    Merge remote-tracking branch 'origin/main' into feature/martin-admin
+    
+    # Conflicts:
+    #       app/admin.py
+    #       app/templates/base.html
+    #       app/views.py
+
+[33mcommit af47314474b048087083cdd28847fd3e8f95933d[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 23 07:53:30 2026 -0300
+
+    feat: añadido seguimiento para esta rama
+
+[33mcommit 3d4c1f5b0491185425c154bc0ebc555d0fb80bce[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 23 07:53:01 2026 -0300
+
+    feat: añadidas las vistas y urls junto a las paginas para crear una ausencia y listar ausencias, falta definir restriccion de vista por tipo de usuario
+
+[33mcommit 99f0b292937e05c703e2b218ef755caa3bf6f590[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 23 07:51:31 2026 -0300
+
+    feat: añadido mensaje de success al crear una ausencia, revisar reusabilidad
+
+[33mcommit a61e51f48f02d8bb539578d4a478273b3c0ca76b[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 23 07:50:29 2026 -0300
+
+    feat: añadida carpeta de forms y form de Ausencia
+
+[33mcommit 63f572aee7d3abe317e3ae07ea281fd5033563ae[m
+Merge: ee6d849 6a0b9c7
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Tue Jun 23 00:01:43 2026 -0300
+
+    Merge pull request #8 from martin2716/feat/entrega-final-maxi-v1.1
+    
+    Feat/entrega final maxi v1.1
+    
+    estan bien aplicados los cambios que se pidieron en la division de tareas
+
+[33mcommit 6a0b9c73084d4b19e13d3c703e44b8a7a49f41dd[m[33m ([m[1;31morigin/feat/entrega-final-maxi-v1.1[m[33m)[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Mon Jun 22 22:53:40 2026 -0300
+
+    Refactor: fixture actualizado
+
+[33mcommit 7da734e23264a7011f9dde6bee257c8ccbe20162[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Mon Jun 22 21:19:34 2026 -0300
+
+    Feat:Implementar filtro por especialidad en ListaMedicosView
+
+[33mcommit 5bbc1ba48dabc5c420203b379e721f70560ee8d3[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Mon Jun 22 19:33:53 2026 -0300
+
+    refactor: centralizar lógica de perfil, implementar control de acceso por roles y mejorar UI dinámica
+
+[33mcommit fa0bf55cfe9edaac8072c68c975a283bcc766e00[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Sun Jun 21 21:38:41 2026 -0300
+
+    chore: avanza integracion semifinal de entrega final
+
+[33mcommit 3155d05dd5b62bb355b87ba3402be81a83c9fa37[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Sun Jun 21 16:21:24 2026 -0300
+
+    se completo el registro de modelos en el admin
+
+[33mcommit cf4ea5d42536a0df037d94da35ed933906f05ab3[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Sat Jun 20 23:02:44 2026 -0300
+
+    feat: gestión de perfil de usuario
+    
+    - Agregada edición de perfil, vista,y template para el perfil y automatización con signal
+
+[33mcommit ec1baec9363a8ce99c1119190505463b7095e868[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Sat Jun 20 20:51:21 2026 -0300
+
+    feat: proteger vistas con mixin y adaptar menú según roles de usuario y agregar el resto de modelos en admin.py
+
+[33mcommit 51dd00d2c8426c17bb7329736f256d105ee70393[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Sat Jun 20 17:55:04 2026 -0300
+
+    Fix: consolidar relación Paciente-ObraSocial con PROTECT y tests de paciente actualizados
+
+[33mcommit f7e5d46ff438961edeef0d551631ec444be5d431[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Thu Jun 18 00:26:06 2026 -0300
+
+    Refactor: arquitectura de modelos y limpieza de migraciones
+
+[33mcommit 56f7d486e0764f393f8d53f33aea7a82fbb4e470[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Thu Jun 18 00:16:05 2026 -0300
+
+    Refactor : tests de obra social y medico
+
+[33mcommit 90892241fcd9b39258362970c1648937f0f28527[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Wed Jun 17 23:50:46 2026 -0300
+
+    Refactor: ObraSocial como entidad independiente con metodos validate, new, update y property
+
+[33mcommit e83f85db8ec6a4546706f2e52fe6e44a3fae4c8c[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Wed Jun 17 23:29:53 2026 -0300
+
+    Refactor: Integrar ManyToMany en Medico y Corregir update y new
+
+[33mcommit ee6d849e6cd5db90a829a8fbbd213fd88c1c2b60[m
+Merge: 400006c 7904d64
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Wed Jun 17 22:09:27 2026 -0300
+
+    Merge branch 'main' of https://github.com/martin2715/turno-ya
+
+[33mcommit 400006c989d900b8493511558b59d8a60fcf10bd[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Wed Jun 17 22:05:15 2026 -0300
+
+    fix: se reorganiza models.py y se crea una carpeta donde cada clase del modelo tiene su propio archivo, esto para mejorar la usabilidad del proyecto
+
+[33mcommit 7904d64348f49ea792cb2f20ca0ad6878ff0afb8[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Sun Jun 14 16:19:08 2026 -0300
+
+    Checkpoint antes de empezar entrega final
+
+[33mcommit df78ccb0574294b4ba75426ade25c299b2123a29[m
+Merge: e63bc3a 3effd70
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 2 20:20:07 2026 -0300
+
+    Merge branch 'main' of https://github.com/martin2716/turno-ya
+
+[33mcommit 3effd704377430fdc2fe1776f7aada41db520f4b[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Tue Jun 2 18:23:42 2026 -0300
+
+    feat: implementar vista de lista de pacientes y actualizar navegación
+
+[33mcommit e63bc3abb0cda88ee4dcd2e516a28c1424f4d3ce[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 2 17:12:47 2026 -0300
+
+    feat: añadida vista de la lista de turnos ya asignados
+
+[33mcommit 243b73378c563dd632d53a0a2eb85b9b3ebff9b0[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 2 14:01:26 2026 -0300
+
+    feat: añadidos nuevos fixtures y arreglado el de medicos
+
+[33mcommit ee2841faf16956778f9fd53dbafbcec3b9c30d11[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Tue Jun 2 13:52:33 2026 -0300
+
+    feat: añadidos test faltantantes para Asucencia y ObraSocial, junto a correcciones en TurnoModelTest
+
+[33mcommit 370ae9d3a42a288df54d972c65043458c79e2d46[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 1 18:07:22 2026 -0300
+
+    feat: añadido test basico para Ausencia
+
+[33mcommit a57415d553176635c9f03dc076a5897001984374[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 1 18:06:58 2026 -0300
+
+    feat: añadidos metodos de negocio faltante en Ausencia
+
+[33mcommit a9dd95e07a02543a02fb4510cdeda6577fcd672c[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 1 17:18:30 2026 -0300
+
+    fix: correccion error de validacion
+
+[33mcommit 749951866894b09d822e873dff0f8a960788d9a0[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 1 17:12:13 2026 -0300
+
+    feat: añadida ultima version de migrations
+
+[33mcommit c9f1988d1ef5d964b2cb54bf2eb91643f6682c04[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Mon Jun 1 17:11:53 2026 -0300
+
+    fix: corregido falta de imports y correccion en orden de creacion de Clases, Ausencia debia estar despues de Medico
+
+[33mcommit 98bcc694a0f46fc39b9acebc4aef769dbb2fc4bb[m
+Merge: b70a9a0 f21e8ec
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Mon Jun 1 15:51:35 2026 -0300
+
+    Merge pull request #7 from martin2716/feature/turno-model-base
+    
+    Feature/turno model base
+
+[33mcommit f21e8ecbb78be2fe3aa0cd2f1819688023848f7c[m
+Merge: 5a826c9 b70a9a0
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Mon Jun 1 15:51:19 2026 -0300
+
+    Merge branch 'main' into feature/turno-model-base
+
+[33mcommit b70a9a0d5378b7dfc8b6dde8364b8da2c770fc3c[m
+Merge: 0900ca9 1ac653c
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Mon Jun 1 15:14:59 2026 -0300
+
+    Merge pull request #6 from martin2716/feature/especialidad-home
+    
+    feat: agrega especialidad, admin y estadisticas del home
+
+[33mcommit 1ac653cae3289b21b74e899c429599ae30d74a7f[m[33m ([m[1;31morigin/feature/especialidad-home[m[33m)[m
+Merge: fa1d445 0900ca9
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Mon Jun 1 15:14:13 2026 -0300
+
+    Merge branch 'main' into feature/especialidad-home
+
+[33mcommit 5a826c94b304c734897c2e1f0c538cb16270cbb3[m
+Author: BigHouseBH <[TU-EMAIL@gmail.com]>
+Date:   Sun May 31 17:23:39 2026 -0300
+
+    feat: agregar tests completos para modelo Turno con validate, new, update y metodos de negocio
+
+[33mcommit 0900ca95209e81b9a8aed6675a5bec638d008cae[m
+Merge: 4b87d59 0b8d5c4
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Sun May 31 14:41:37 2026 -0300
+
+    Merge pull request #4 from martin2716/feat/implementacion-tests
+    
+    se elige mergear esta por sobre las otras ya que trae la totalidad de los commits
+
+[33mcommit 4b87d594a43c779df1f7ec040d96177aef046a23[m
+Merge: 6de9def 5943404
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Sun May 31 14:31:22 2026 -0300
+
+    Merge pull request #1 from martin2716/docs/guia-setup
+    
+    docs: agregar archivo SETUP.md
+
+[33mcommit 6de9defa8a016f9b37bbc85ec184c2a1438fdf19[m
+Merge: 860e2f9 de8f433
+Author: dddario-tdf-edu <103612977+dddario-tdf-edu@users.noreply.github.com>
+Date:   Sun May 31 14:28:04 2026 -0300
+
+    Merge pull request #5 from martin2716/especialidad
+    
+    feat: añadida clase Ausencia
+
+[33mcommit de8f433ccc06e4ea30ae762b665608bcd2685607[m[33m ([m[1;31morigin/especialidad[m[33m)[m
+Author: dddario-tdf-edu <davidwiz.one@gmail.com>
+Date:   Sun May 31 13:42:36 2026 -0300
+
+    feat: añadida clase Ausencia
+
+[33mcommit fa1d445d4f120a59c602d5caa96ba9cc156ebd9a[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Fri May 29 14:53:34 2026 -0300
+
+    feat: agrega especialidad, admin y estadisticas del home
+
+[33mcommit 0b8d5c427fae9561d808058525b8a2e87c4b0767[m[33m ([m[1;31morigin/feat/implementacion-tests[m[33m)[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Wed May 27 23:55:20 2026 -0300
+
+    feat: agregar tests unitarios para modelo Paciente
+
+[33mcommit d525b4264e9644907fdb87b0a3b10ec198f8a1ab[m
+Author: BigHouseBH <[TU-EMAIL@gmail.com]>
+Date:   Wed May 27 22:33:56 2026 -0300
+
+    feat: agregar modelo Turno con validate, new, update y tests
+
+[33mcommit 39163cf9f89c814a19bd0d237faa6cf67c5b630d[m[33m ([m[1;31morigin/feat/implementacion-metodos[m[33m)[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Tue May 26 17:34:26 2026 -0300
+
+    feat(models): implementar validate, new, update y logica de negocio en Paciente (puede_solicitar_turno)
+
+[33mcommit c2b77ac84742e0de0c3ab3aa2d0a002ce850485e[m[33m ([m[1;31morigin/feat/definicion-modelos[m[33m)[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Tue May 26 16:23:28 2026 -0300
+
+    feat: definir modelos Paciente y ObraSocial iniciales
+
+[33mcommit 594340412bc47164b1d5d5f01f9448da85c3cd21[m[33m ([m[1;31morigin/docs/guia-setup[m[33m)[m
+Author: maxirubidarte-boop <maxirubidarte@gmail.com>
+Date:   Tue May 26 12:42:37 2026 -0300
+
+    docs: agregar archivo SETUP.md
+
+[33mcommit 860e2f92c7084029761f9794ce01a3b828a142a9[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Mon May 25 19:30:35 2026 -0300
+
+    agrego la guia interna del grupo
+
+[33mcommit 49ecbc2c9558d2b00872490db48b5cf04b8bae0f[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Mon May 25 19:30:35 2026 -0300
+
+    documento criterios comunes para el equipo
+
+[33mcommit 96dbdd7079de7c99eed7136188803f98ee882ed8[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Mon May 25 19:30:35 2026 -0300
+
+    dejo lista la estructura compartida del proyecto
+
+[33mcommit 5509b37fe4d8967149979100588520b767bdd5f6[m
+Author: Martin Daniel Acosta <martin.d.acosta2@gmail.com>
+Date:   Mon May 25 19:30:35 2026 -0300
+
+    armo una base comun para autenticacion
+
+[33mcommit a9f5a883c5616030824edd32f4ac37b415f0d049[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:49:58 2026 -0300
+
+    fix: arregla tests
+
+[33mcommit 8d5bec64113b1353c045603eda91ece85cfcec3b[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:47:17 2026 -0300
+
+    chore: prompt contextual
+
+[33mcommit 910561ad001c76fdd4988dbf3edf4b16dccec2c2[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:46:57 2026 -0300
+
+    feat: agrega app con modelo de medico y dos vistas basicas
+
+[33mcommit 4df7192418fbd627690d6827fba8aa01ab5fdd2c[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:46:33 2026 -0300
+
+    chore: estructura basica de proyecto django
+
+[33mcommit 900330ddc6ce60f832039896588b70e43bafbf8e[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:44:10 2026 -0300
+
+    chore: agrega ignore
+
+[33mcommit 8d511de49d17fe70b6aabcb4b8208ad91b02f18a[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:43:52 2026 -0300
+
+    chore: agrega dependencias
+
+[33mcommit 26a8a7988719842dfe342f5ffb09d2050c9b7a46[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Thu May 7 16:43:27 2026 -0300
+
+    chore: completa Readme
+
+[33mcommit 6e842a68d206a2a89c0998ee2a750e104d71b8e6[m
+Author: Ivan D'Uva <duva.ivan@outlook.com>
+Date:   Wed May 6 13:45:40 2026 -0300
+
+    Initial commit
