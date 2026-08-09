@@ -35,6 +35,13 @@
             </li>
           {% endif %}
 
+          <!-- Recordatorios (solo pacientes) -->
+          {% if not user.is_staff and user.paciente %}
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'app:recordatorios' %}">Recordatorios</a>
+          </li>
+          {% endif %}
+
           {% if perms.app.view_ausencia %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'app:lista_ausencias' %}">Ausencias</a>

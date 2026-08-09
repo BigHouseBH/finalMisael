@@ -1,9 +1,19 @@
-"""Rutas públicas de la aplicación principal."""
-
 from django.urls import path
 from . import views
 from .views_historial import HistorialView
-from .views_turnos import *
+from .views_turnos import (
+    SeleccionarEspecialidadView,
+    MedicosDisponiblesView,
+    TurnosDisponiblesView,
+    ConfirmarTurnoView,
+    AceptarTurnoView,
+    RechazarTurnoView,
+    CancelarTurnoView,
+    RegistrarAsistenciaView,
+    DetalleTurnoView,
+)
+from .views_recordatorios import ListaRecordatoriosView, MarcarLeidoView
+
 app_name = "app"
 
 urlpatterns = [
@@ -19,7 +29,7 @@ urlpatterns = [
     path("ausencias/<int:pk>/eliminar/", views.EliminarAusenciaView.as_view(), name="eliminar_ausencia"),
     path('paciente/<int:pk>/historial/', HistorialView.as_view(), name='historial'),
 
-    # --- Flujo de pedir turno ---
+    # --- Flujo de pedir turno (desde views_turnos) ---
     path("especialidades/", SeleccionarEspecialidadView.as_view(), name="seleccionar_especialidad"),
     path("especialidad/<int:especialidad_id>/medicos/", MedicosDisponiblesView.as_view(), name="medicos_disponibles"),
     path("medico/<int:medico_id>/turnos/", TurnosDisponiblesView.as_view(), name="turnos_disponibles"),
@@ -28,4 +38,9 @@ urlpatterns = [
     path("turnos/<int:pk>/rechazar/", RechazarTurnoView.as_view(), name="rechazar_turno"),
     path("turnos/<int:pk>/cancelar/", CancelarTurnoView.as_view(), name="cancelar_turno"),
     path('turno/<int:pk>/registrar-asistencia/', RegistrarAsistenciaView.as_view(), name='registrar_asistencia'),
+
+    # --- Recordatorios ---
+    path('recordatorios/', ListaRecordatoriosView.as_view(), name='recordatorios'),
+    path('recordatorios/<int:pk>/marcar-leido/', MarcarLeidoView.as_view(), name='marcar_leido'),
+    path('turno/<int:pk>/', DetalleTurnoView.as_view(), name='detalle_turno'),
 ]

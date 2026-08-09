@@ -9,6 +9,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    "django_apscheduler",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

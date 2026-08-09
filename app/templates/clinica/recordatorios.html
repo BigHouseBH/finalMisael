@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mis Recordatorios</h2>
+    <hr>
+
+    {% if recordatorios %}
+        <div class="list-group">
+            {% for recordatorio in recordatorios %}
+                <div class="list-group-item d-flex justify-content-between align-items-center {% if not recordatorio.leido %}list-group-item-warning{% endif %}">
+                    <div>
+                        <p class="mb-1">{{ recordatorio.mensaje }}</p>
+                        <small class="text-muted">{{ recordatorio.fecha_creacion|date:"d/m/Y H:i" }}</small>
+                        <span class="badge {% if recordatorio.leido %}bg-success{% else %}bg-warning{% endif %} ms-2">
+                            {% if recordatorio.leido %}Leído{% else %}No leído{% endif %}
+                        </span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        {% if not recordatorio.leido %}
+                            <form method="post" action="{% url 'app:marcar_leido' recordatorio.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-primary">Marcar como leído</button>
+                            </form>
+                        {% endif %}
+                        <a href="{% url 'app:detalle_turno' recordatorio.turno.id %}" class="btn btn-sm btn-info">
+                            Ver turno
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No tienes recordatorios.</div>
+    {% endif %}
+</div>
+{% endblock %}

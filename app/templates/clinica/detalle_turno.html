@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalle del Turno</h2>
+    <hr>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Paciente:</strong> {{ turno.paciente.nombre }} {{ turno.paciente.apellido }}</p>
+                    <p><strong>Médico:</strong> Dr/a. {{ turno.medico.nombre }} {{ turno.medico.apellido }}</p>
+                    <p><strong>Especialidad:</strong> {{ turno.medico.especialidad.nombre }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Fecha y hora:</strong> {{ turno.fecha_hora|date:"d/m/Y H:i" }}</p>
+                    <p><strong>Estado:</strong> 
+                        <span class="badge 
+                            {% if turno.estado == 'pendiente' %}bg-warning
+                            {% elif turno.estado == 'confirmado' %}bg-success
+                            {% elif turno.estado == 'cancelado' %}bg-danger
+                            {% elif turno.estado == 'atendido' %}bg-info
+                            {% elif turno.estado == 'no_asistio' %}bg-secondary
+                            {% else %}bg-secondary{% endif %}">
+                            {{ turno.get_estado_display }}
+                        </span>
+                    </p>
+                    <p><strong>Motivo:</strong> {{ turno.motivo }}</p>
+                    {% if turno.observaciones %}
+                        <p><strong>Observaciones:</strong> {{ turno.observaciones }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'app:recordatorios' %}" class="btn btn-secondary">Volver a recordatorios</a>
+        <a href="{% url 'app:lista_turnos' %}" class="btn btn-outline-secondary">Ver todos los turnos</a>
+    </div>
+</div>
+{% endblock %}

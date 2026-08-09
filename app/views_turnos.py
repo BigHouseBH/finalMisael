@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
-from django.views.generic import CreateView, ListView, TemplateView
-
+from django.views.generic import CreateView, ListView, TemplateView, DetailView
 from .models import Especialidad, Medico, Paciente, Turno, Ausencia
 from .views import PerfilPacienteRequiredMixin, DIAS_CALENDARIO, slots_libres_de_medico# ==================== FLUJO DE PEDIR TURNO ====================
 
@@ -322,3 +321,25 @@ class RegistrarAsistenciaView(LoginRequiredMixin, View):
             messages.success(request, "Turno marcado como no asistió.")
         
         return redirect('app:lista_turnos')
+    
+    
+    
+    
+    
+    
+
+class DetalleTurnoView(LoginRequiredMixin, DetailView):
+    model = Turno
+    template_name = 'clinica/detalle_turno.html'
+    context_object_name = 'turno'
+
+    def get_queryset(self):
+        # Solo permite ver turnos del paciente autenticado o médicos asignados
+        user = self.request.user
+        if user.is_staff:
+            return Turno.objects.all()
+        return Turno.objects.filter(
+            paciente__usuario=user
+        ) | Turno.objects.filter(
+            medico__usuario=user
+        )
