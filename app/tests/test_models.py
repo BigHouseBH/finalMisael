@@ -12,6 +12,7 @@ from app.models.obra_social import ObraSocial
 from app.models.paciente import Paciente
 from app.models.turno import Turno
 from app.models.ausencia import Ausencia
+from app.models.recordatorios import Recordatorio
 
 
 class EspecialidadModelTest(TestCase):
@@ -119,13 +120,13 @@ class PacienteModelTest(TestCase):
     """Verifica comportamiento básico y validaciones del modelo Paciente."""
 
     def setUp(self):
-        # 1. Necesitamos la obra social
+        #Obra social base
         self.obra_social = ObraSocial.objects.create(nombre="IOMA")
     
-        # 2. Creamos el usuario
+        #Usuario base
         self.user = User.objects.create_user(username='maxi', password='1234')
     
-        # 3. CREAMOS el paciente usando el método new
+        #Crea paciente base con metodo new
         self.paciente, errors = Paciente.new(
             usuario=self.user,
             nombre="Juan",
@@ -134,100 +135,89 @@ class PacienteModelTest(TestCase):
             telefono="123456",
             dni="11111111",
             obra_social=self.obra_social
-    )
+        )
          
-    # --- __str__ y métodos simples ---
+    #Metodos y formato str
 
     def test_str_formato_correcto(self):
-        # Verificamos el formato exacto: "Apellido, Nombre"
+        #Verifica formato exacto: Apellido, Nombre
         self.assertEqual(str(self.paciente), "Perez, Juan")
 
     def test_puede_solicitar_turno_true(self):
-        # Caso feliz: tiene todo
+        #Caso ideal con datos completos
         self.assertTrue(self.paciente.puede_solicitar_turno())
 
     def test_puede_solicitar_turno_false_sin_obra_social(self):
-        # Caso negativo: le quitamos la obra social
+        #Caso negativo sin obra social
         self.paciente.obra_social = None
         self.assertFalse(self.paciente.puede_solicitar_turno())
 
     def test_puede_solicitar_turno_false_sin_nada(self):
-        # Caso negativo extremo: no tiene nada
+        #Caso negativo sin telefono ni obra social
         self.paciente.telefono = ""
         self.paciente.obra_social = None
         self.assertFalse(self.paciente.puede_solicitar_turno())
 
     def test_puede_solicitar_turno_false_sin_telefono(self):
-        # Caso borde: le quitamos el teléfono y esperamos que sea False
+        #Caso borde sin telefono
         self.paciente.telefono = ""
         self.assertFalse(self.paciente.puede_solicitar_turno())
 
-    
-    # --- validate ---
+    #Validaciones
 
     def test_validate_datos_correctos_retorna_lista_vacia(self):
-        # Todos los campos OK
+        #Valida datos completos y correctos
         errors = Paciente.validate("Juan", "Perez", "12345678", "juan@test.com", "123456", self.obra_social)
         self.assertEqual(errors, [])
 
     def test_validate_campos_obligatorios_vacios_retorna_errores(self):
-        # Probamos que el portero detecte si faltan nombre, apellido o DNI
+        #Valida obligatoriedad de nombre, apellido y DNI
         errors = Paciente.validate("", "", "", "juan@test.com", "123456", self.obra_social)
         self.assertIn("El nombre es obligatorio.", errors)
         self.assertIn("El apellido es obligatorio.", errors)
         self.assertIn("El DNI es obligatorio.", errors)
 
     def test_validate_dni_duplicado_retorna_error(self):
-        # Para que este test funcione, tiene que existir un paciente con ese DNI
-        # Usamos el DNI de el setup: "11111111"
+        #Valida rechazo de DNI duplicado existente en setUp
         errors = Paciente.validate("Otro", "Persona", "11111111", "otro@test.com", "999", self.obra_social)
         self.assertIn("Ya existe un paciente registrado con ese DNI.", errors)
 
     def test_validate_email_invalido_retorna_error(self):
-        # Probamos que detecte si falta el "@"
+        #Valida formato de email
         errors = Paciente.validate("Juan", "Perez", "99999999", "email-invalido", "123456", self.obra_social)
         self.assertIn("El email ingresado no es válido.", errors)
 
-    # --- new ---
+    #Creacion new
 
     def test_new_crea_paciente_con_datos_validos(self):
-        # 1. Preparar un usuario 
         nuevo_user = User.objects.create_user(username="roberto")
         
-        # 2. Llamar a new 
         paciente, errors = Paciente.new(
             nuevo_user, "Roberto", "Rubidarte", "roberto@test.com", "654321", "46087375", self.obra_social
         )
         
-        # 3. Verificaciones 
-        self.assertEqual(errors, [])             # Que no haya errores
-        self.assertIsNotNone(paciente)           # Que el objeto no sea None
-        self.assertEqual(paciente.nombre, "Roberto") # Que el nombre sea el que pasamos
-        self.assertTrue(Paciente.objects.filter(dni="46087375").exists()) # ¡que esté en la base de datos!
-
+        #Verifica creacion y persistencia en base de datos
+        self.assertEqual(errors, [])
+        self.assertIsNotNone(paciente)
+        self.assertEqual(paciente.nombre, "Roberto")
+        self.assertTrue(Paciente.objects.filter(dni="46087375").exists())
 
     def test_new_con_datos_invalidos_no_crea_paciente(self):
-        # 1. Contamos cuántos pacientes hay antes de intentar crear el inválido
         count_antes = Paciente.objects.count()
-        
         nuevo_user = User.objects.create_user(username="roberto2")
 
         paciente, errors = Paciente.new(
             nuevo_user, "", "", "email-invalido", "", "", None
         )
 
-        # 2. Verificaciones
+        #Verifica que rechaza creacion y no altera la base de datos
         self.assertIsNone(paciente)
-        self.assertTrue(len(errors) > 0) 
-        
-        # 3. Verificación definitiva: la cantidad en la BD no cambió
+        self.assertTrue(len(errors) > 0)
         self.assertEqual(Paciente.objects.count(), count_antes)
 
-    # --- update ---
+    #Actualizacion update
 
     def test_update_modifica_datos_correctamente(self):
-        # 1. Usamos self.paciente (el que ya existe gracias al setUp)
-        # 2. Llamamos a su método .update() con datos nuevos
         errors = self.paciente.update(
             "Roberto Actualizado", 
             "Rubidarte", 
@@ -237,52 +227,31 @@ class PacienteModelTest(TestCase):
             self.obra_social
         )
         
-        # 3. Verificaciones
-        self.assertEqual(errors, []) # Que no haya errores
-        
-        # 4. Refrescamos para ver los cambios en la base de datos
+        #Verifica actualizacion y persistencia de cambios
+        self.assertEqual(errors, [])
         self.paciente.refresh_from_db()
-        
-        # 5. Confirmamos que los campos cambiaron
         self.assertEqual(self.paciente.nombre, "Roberto Actualizado")
         self.assertEqual(self.paciente.email, "nuevo_email@test.com")
 
-
-
-
     def test_update_con_datos_invalidos_no_modifica(self):
-        # Guardamos el nombre original para comparar después
         nombre_original = self.paciente.nombre
-        
-        # Intentamos actualizar con datos vacíos
         errors = self.paciente.update("", "", "email-invalido", "", "", None)
 
-        # 1. Verificamos que el validador detectó errores
+        #Verifica que detecta error y mantiene valores originales
         self.assertTrue(len(errors) > 0)
-        
-        # 2. Refrescamos para ver si algo cambió en la BD
         self.paciente.refresh_from_db()
-        
-        # 3. Verificamos que el nombre sigue siendo el original
-        # Esto prueba que el update no guardó datos inválidos
         self.assertEqual(self.paciente.nombre, nombre_original)
 
-
     def test_update_con_dni_de_otro_paciente_retorna_error(self):
-        # 1. Preparar un usuario rival
         nuevo_user = User.objects.create_user(username="joaco")
-        
-        # 2. Crear al paciente rival
         Paciente.new(
             nuevo_user, "joaco", "Rubidarte", "joaco@test.com", "654321", "12345678", self.obra_social
         )
 
-        # 3. Intentar actualizar nuestro paciente con el DNI del rival 
+        #Verifica rechazo de actualizacion por DNI duplicado
         errors = self.paciente.update(
             "Juan", "Perez", "juan@perez.com", "123456", "12345678", self.obra_social 
         )
-
-        # 4. Verificación 
         self.assertTrue(len(errors) > 0)
 
 class AusenciaModelTest(TestCase):
@@ -299,7 +268,7 @@ class AusenciaModelTest(TestCase):
           errors = Ausencia.validate("Vacaciones", date(2025, 6, 10), date(2025, 6, 1), )
           self.assertTrue(len(errors) > 0)
 
-    # --- new ---
+    #-------------------new-------------------
 
         def test_new_crea_ausencia_con_datos_validos(self):
             ausencia, errors = Ausencia.new("Vacaciones", date(2025, 6, 1), date(2025, 6, 10), self.medico)
@@ -314,7 +283,7 @@ class AusenciaModelTest(TestCase):
             self.assertTrue(len(errors) > 0)
             self.assertEqual(Ausencia.objects.count(), count_antes)
 
-        # --- update ---
+        #-------------------update-------------------
 
         def test_update_modifica_motivo_correctamente(self):
             ausencia, _ = Ausencia.new("Vacaciones", date(2025, 6, 1), date(2025, 6, 10), self.medico)
@@ -351,7 +320,7 @@ class TurnoModelTest(TestCase):
           )
           self.fecha_valida = timezone.now() + timedelta(days=5)
 
-      # --- validate ---
+      #-------------------validate-------------------
 
       def test_validate_datos_correctos_retorna_lista_vacia(self):
           errors = Turno.validate(self.medico, self.paciente, self.fecha_valida, "Consulta")
@@ -374,7 +343,7 @@ class TurnoModelTest(TestCase):
           errors = Turno.validate(self.medico, self.paciente, self.fecha_valida, "Otra")
           self.assertTrue(len(errors) > 0)
 
-      # --- new ---
+      #-------------------new-------------------
 
       def test_new_crea_turno_con_datos_validos(self):
           turno, errors = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
@@ -390,7 +359,7 @@ class TurnoModelTest(TestCase):
           self.assertTrue(len(errors) > 0)
           self.assertEqual(Turno.objects.count(), count_antes)
 
-      # --- update ---
+      #-------------------update-------------------
 
       def test_update_modifica_observaciones_correctamente(self):
           turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
@@ -403,32 +372,41 @@ class TurnoModelTest(TestCase):
           turno.refresh_from_db()
           self.assertEqual(turno.observaciones, "Nueva observación")
 
-      # --- transiciones de estado ---
+      #-------------------transiciones de estado-------------------
 
+      #Aceptacion de turno
       def test_aceptar_cambia_estado_a_confirmado(self):
           turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
           turno.aceptar()
           turno.refresh_from_db()
           self.assertEqual(turno.estado, Turno.CONFIRMADO)
 
+      #Rechazo de turno por parte del medico
       def test_rechazar_cambia_estado_a_cancelado(self):
           turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
           turno.rechazar()
           turno.refresh_from_db()
           self.assertEqual(turno.estado, Turno.CANCELADO)
 
+      #Cancelacion de turno por parte del paciente
       def test_cancelar_cambia_estado_a_cancelado(self):
           turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
           turno.cancelar()
           turno.refresh_from_db()
           self.assertEqual(turno.estado, Turno.CANCELADO)
 
-      def test_finalizar_cambia_estado_a_finalizado(self):
+      #Estado de asistencia
+      def test_atendido_cambia_estado_a_atendido(self):
           turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
-          turno.finalizar()
+          turno.marcar_asistencia(True)
           turno.refresh_from_db()
-          self.assertEqual(turno.estado, Turno.FINALIZADO)
+          self.assertEqual(turno.estado, Turno.ATENDIDO)
 
+      def test_no_asistio_cambia_estado_a_no_asistio(self):
+          turno, _ = Turno.new(self.medico, self.paciente, self.fecha_valida, "Consulta")
+          turno.marcar_asistencia(False)
+          turno.refresh_from_db()
+          self.assertEqual(turno.estado, Turno.NO_ASISTIO)
 
 class FranjaHorariaModelTest(TestCase):
     """Verifica validaciones y métodos de FranjaHoraria."""
@@ -526,3 +504,57 @@ class ObraSocialModelTest(TestCase):
         self.assertEqual(self.obra_social.nombre, "SWISS MEDICAL")
         # Confirmamos que se guardó en BD
         self.assertTrue(ObraSocial.objects.filter(nombre="SWISS MEDICAL").exists())
+
+
+class RecordatorioModelTest(TestCase):
+    """Verifica creación y métodos del modelo Recordatorio."""
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="paciente_rec", password="password")
+        self.especialidad = Especialidad.objects.create(nombre="Oftalmología")
+        self.obra_social = ObraSocial.objects.create(nombre="OSDE")
+        self.medico = Medico.objects.create(
+            nombre="Carlos", apellido="Vargas",
+            matricula="MP-5555", especialidad=self.especialidad,
+        )
+        self.paciente = Paciente.objects.create(
+            usuario=self.user,
+            nombre="Lucas", apellido="Silva",
+            email="lucas@test.com", telefono="123456",
+            dni="33333333", obra_social=self.obra_social,
+        )
+        self.turno, _ = Turno.new(
+            medico=self.medico,
+            paciente=self.paciente,
+            fecha_hora=timezone.now() + timedelta(days=1),
+            motivo="Control visual",
+        )
+
+    def test_creacion_recordatorio_por_defecto_no_leido(self):
+        recordatorio = Recordatorio.objects.create(
+            turno=self.turno,
+            paciente=self.paciente,
+            mensaje="Recordatorio: Mañana tenés tu turno con Carlos Vargas.",
+        )
+        self.assertFalse(recordatorio.leido)
+        self.assertEqual(recordatorio.turno, self.turno)
+        self.assertEqual(recordatorio.paciente, self.paciente)
+
+    def test_str_recordatorio(self):
+        recordatorio = Recordatorio.objects.create(
+            turno=self.turno,
+            paciente=self.paciente,
+            mensaje="Tu turno es mañana",
+        )
+        self.assertIn(self.user.username, str(recordatorio))
+
+    def test_marcar_como_leido(self):
+        recordatorio = Recordatorio.objects.create(
+            turno=self.turno,
+            paciente=self.paciente,
+            mensaje="Recordatorio de prueba",
+        )
+        recordatorio.leido = True
+        recordatorio.save()
+        recordatorio.refresh_from_db()
+        self.assertTrue(recordatorio.leido)

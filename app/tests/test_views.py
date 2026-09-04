@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from app.models import Especialidad, Medico, ObraSocial, Paciente, Turno
+from app.models.recordatorios import Recordatorio
 
 
 class ViewAccessTest(TestCase):
@@ -146,6 +147,35 @@ class TurnosPorRolViewTest(TestCase):
             {self.turno_paciente.pk, self.turno_otro.pk, self.turno_otro_medico.pk},
         )
 
+    def test_paciente_en_lista_turnos_ve_cancelar_y_no_ve_acciones_de_medico(self):
+        self.client.login(username="paciente1", password="1234")
+        response = self.client.get(reverse("app:lista_turnos"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Cancelar")
+        self.assertNotContains(
+            response, reverse("app:aceptar_turno", args=[self.turno_paciente.pk])
+        )
+        self.assertNotContains(
+            response, reverse("app:rechazar_turno", args=[self.turno_paciente.pk])
+        )
+        self.assertNotContains(
+            response, reverse("app:historial", args=[self.paciente.pk])
+        )
+
+    def test_medico_en_lista_turnos_ve_acciones_post_de_aceptar_rechazar(self):
+        self.client.login(username="medico1", password="1234")
+        response = self.client.get(reverse("app:lista_turnos"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, reverse("app:aceptar_turno", args=[self.turno_paciente.pk])
+        )
+        self.assertContains(
+            response, reverse("app:rechazar_turno", args=[self.turno_paciente.pk])
+        )
+        self.assertContains(
+            response, reverse("app:historial", args=[self.paciente.pk])
+        )
+
     def test_paciente_no_puede_ver_lista_global_de_pacientes(self):
         self.client.login(username="paciente1", password="1234")
         response = self.client.get(reverse("app:lista_pacientes"))
@@ -180,3 +210,98 @@ class TurnosPorRolViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.turno_paciente.refresh_from_db()
         self.assertEqual(self.turno_paciente.estado, Turno.PENDIENTE)
+
+    def test_medico_asignado_puede_rechazar_turno(self):
+        self.client.login(username="medico1", password="1234")
+        response = self.client.post(
+            reverse("app:rechazar_turno", args=[self.turno_paciente.pk])
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.turno_paciente.refresh_from_db()
+        self.assertEqual(self.turno_paciente.estado, Turno.CANCELADO)
+
+    def test_paciente_puede_cancelar_turno_propio(self):
+        self.client.login(username="paciente1", password="1234")
+        response = self.client.post(
+            reverse("app:cancelar_turno", args=[self.turno_paciente.pk])
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.turno_paciente.refresh_from_db()
+        self.assertEqual(self.turno_paciente.estado, Turno.CANCELADO)
+
+    def test_paciente_no_puede_cancelar_turno_ajeno(self):
+        self.client.login(username="paciente2", password="1234")
+        response = self.client.post(
+            reverse("app:cancelar_turno", args=[self.turno_paciente.pk])
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.turno_paciente.refresh_from_db()
+        self.assertEqual(self.turno_paciente.estado, Turno.PENDIENTE)
+
+    def test_registrar_asistencia_como_atendido(self):
+        self.client.login(username="medico1", password="1234")
+        # El turno debe ser de hoy y estar confirmado
+        self.turno_paciente.fecha_hora = timezone.now()
+        self.turno_paciente.estado = Turno.CONFIRMADO
+        self.turno_paciente.save()
+
+        response = self.client.post(
+            reverse("app:registrar_asistencia", args=[self.turno_paciente.pk]),
+            {"asistio": "true"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.turno_paciente.refresh_from_db()
+        self.assertEqual(self.turno_paciente.estado, Turno.ATENDIDO)
+
+    def test_registrar_asistencia_como_no_asistio(self):
+        self.client.login(username="medico1", password="1234")
+        # El turno debe ser de hoy y estar confirmado
+        self.turno_paciente.fecha_hora = timezone.now()
+        self.turno_paciente.estado = Turno.CONFIRMADO
+        self.turno_paciente.save()
+
+        response = self.client.post(
+            reverse("app:registrar_asistencia", args=[self.turno_paciente.pk]),
+            {"asistio": "false"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.turno_paciente.refresh_from_db()
+        self.assertEqual(self.turno_paciente.estado, Turno.NO_ASISTIO)
+
+    def test_confirmar_turno_crea_turno_exitosamente(self):
+        self.client.login(username="paciente1", password="1234")
+        fecha_str = "2026-11-20"
+        hora_str = "10:00"
+        response = self.client.post(
+            reverse(
+                "app:confirmar_turno",
+                kwargs={
+                    "medico_id": self.medico.pk,
+                    "fecha": fecha_str,
+                    "hora": hora_str,
+                },
+            ),
+            {"motivo": "Dolor de cabeza", "observaciones": "Primera vez"},
+        )
+        self.assertEqual(response.status_code, 302)
+        nuevo_turno = Turno.objects.filter(
+            paciente=self.paciente,
+            medico=self.medico,
+            motivo="Dolor de cabeza",
+        ).first()
+        self.assertIsNotNone(nuevo_turno)
+        self.assertEqual(nuevo_turno.estado, Turno.PENDIENTE)
+
+    def test_lista_recordatorios_paciente(self):
+        self.client.login(username="paciente1", password="1234")
+        recordatorio = Recordatorio.objects.create(
+            turno=self.turno_paciente,
+            paciente=self.paciente,
+            mensaje="Recordatorio para paciente 1",
+        )
+        response = self.client.get(reverse("app:recordatorios"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, recordatorio.mensaje)
