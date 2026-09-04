@@ -45,39 +45,56 @@
         <td>{{ turno.motivo|truncatechars:30 }}</td>
         <td>
           <div class="d-flex flex-column gap-1">
-            {% with acciones=turno.acciones_posibles %}
-              {% if acciones %}
-                {% for key, accion in acciones.items %}
-                  {% if accion.disabled %}
-                    <button class="btn btn-sm {{ accion.clase }} w-100" disabled>
-                      {{ accion.label }}
-                    </button>
-                  {% elif accion.post_data %}
-                    <form method="post" action="{{ accion.url }}" class="w-100">
-                      {% csrf_token %}
-                      {% for name, value in accion.post_data.items %}
-                        <input type="hidden" name="{{ name }}" value="{{ value }}">
-                      {% endfor %}
-                      <button type="submit" class="btn btn-sm {{ accion.clase }} w-100">
-                        {{ accion.label }}
-                      </button>
-                    </form>
-                  {% else %}
-                    <a href="{{ accion.url }}"
-                      class="btn btn-sm {{ accion.clase }} w-100"
-                      onclick="return confirm('¿Confirma que desea {{ accion.label|lower }} este turno?')">
-                      {{ accion.label }}
-                    </a>
-                  {% endif %}
-                {% endfor %}
+            <!--Acciones de medico asignado o staff-->
+            {% if user.is_staff or user.medico == turno.medico %}
+              {% if turno.estado == 'pendiente' %}
+                <form method="post" action="{% url 'app:aceptar_turno' turno.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-success w-100" onclick="return confirm('Confirma aceptar este turno')">
+                    Aceptar
+                  </button>
+                </form>
+                <form method="post" action="{% url 'app:rechazar_turno' turno.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger w-100" onclick="return confirm('Confirma rechazar este turno')">
+                    Rechazar
+                  </button>
+                </form>
+              {% elif turno.estado == 'confirmado' %}
+                <!--Acciones de asistencia si la fecha es actual o previa-->
+                {% if turno.fecha_hora.date <= hoy %}
+                  <form method="post" action="{% url 'app:registrar_asistencia' turno.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="asistio" value="true">
+                    <button type="submit" class="btn btn-sm btn-success w-100">Asistio</button>
+                  </form>
+                  <form method="post" action="{% url 'app:registrar_asistencia' turno.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="asistio" value="false">
+                    <button type="submit" class="btn btn-sm btn-secondary w-100">No asistio</button>
+                  </form>
+                {% else %}
+                  <a href="{% url 'app:cancelar_turno' turno.id %}" class="btn btn-sm btn-warning w-100">
+                    Cancelar
+                  </a>
+                {% endif %}
               {% endif %}
-            {% endwith %}
-            
-            {% if turno.paciente %}
-            <a href="{% url 'app:historial' turno.paciente.id %}" 
-               class="btn btn-sm btn-info w-100">
-              Historial
-            </a>
+
+              <!--Historial clinico restringido a medico o staff-->
+              {% if turno.paciente %}
+                <a href="{% url 'app:historial' turno.paciente.id %}" class="btn btn-sm btn-info w-100">
+                  Historial
+                </a>
+              {% endif %}
+
+            <!--Acciones exclusivas de paciente titular-->
+            {% elif turno.paciente.usuario == user %}
+              <!--Permite cancelacion en turnos pendientes o confirmados-->
+              {% if turno.estado == 'pendiente' or turno.estado == 'confirmado' %}
+                <a href="{% url 'app:cancelar_turno' turno.id %}" class="btn btn-sm btn-warning w-100">
+                  Cancelar
+                </a>
+              {% endif %}
             {% endif %}
           </div>
         </td>
