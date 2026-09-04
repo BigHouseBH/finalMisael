@@ -43,17 +43,3 @@ class CrearRecordatorioView(LoginRequiredMixin, CreateView):
         messages.success(self.request, "Recordatorio creado exitosamente.")
         return super().form_valid(form)
 
-# 3. Marcar recordatorio como leído (solo pacientes)
-class MarcarLeidoView(LoginRequiredMixin, UpdateView):
-    model = Recordatorio
-    fields = []  # No se edita ningún campo directamente
-    success_url = reverse_lazy('app:recordatorios')
-
-    def get_queryset(self):
-        # Solo permite modificar recordatorios del paciente autenticado
-        return Recordatorio.objects.filter(paciente=self.request.user.paciente)
-
-    def form_valid(self, form):
-        form.instance.leido = True
-        messages.success(self.request, "Recordatorio marcado como leído.")
-        return super().form_valid(form)

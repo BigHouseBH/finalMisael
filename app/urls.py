@@ -12,7 +12,7 @@ from .views_turnos import (
     RegistrarAsistenciaView,
     DetalleTurnoView,
 )
-from .views_recordatorios import ListaRecordatoriosView, MarcarLeidoView
+from .views_recordatorios import ListaRecordatoriosView
 
 app_name = "app"
 
@@ -41,6 +41,5 @@ urlpatterns = [
 
     # --- Recordatorios ---
     path('recordatorios/', ListaRecordatoriosView.as_view(), name='recordatorios'),
-    path('recordatorios/<int:pk>/marcar-leido/', MarcarLeidoView.as_view(), name='marcar_leido'),
     path('turno/<int:pk>/', DetalleTurnoView.as_view(), name='detalle_turno'),
 ]
