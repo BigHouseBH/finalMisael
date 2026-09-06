@@ -1,8 +1,93 @@
 [
-  {"model": "app.paciente", "pk": 1, "fields": {"usuario": 2, "nombre": "Juan", "apellido": "Pérez", "email": "juan.perez@example.com", "telefono": "2901-123456", "dni": "30111222", "obra_social": 1}},
-  {"model": "app.paciente", "pk": 2, "fields": {"usuario": 3, "nombre": "María", "apellido": "Gómez", "email": "maria.gomez@example.com", "telefono": "2901-234567", "dni": "32222333", "obra_social": 2}},
-  {"model": "app.paciente", "pk": 3, "fields": {"usuario": 4, "nombre": "Pedro", "apellido": "Sánchez", "email": "pedro.sanchez@example.com", "telefono": "2901-345678", "dni": "28333444", "obra_social": 3}},
-  {"model": "app.paciente", "pk": 4, "fields": {"usuario": 5, "nombre": "Lucía", "apellido": "Fernández", "email": "lucia.fernandez@example.com", "telefono": "2901-456789", "dni": "40444555", "obra_social": 4}},
-  {"model": "app.paciente", "pk": 5, "fields": {"usuario": 6, "nombre": "Martín", "apellido": "Díaz", "email": "martin.diaz@example.com", "telefono": "2901-567890", "dni": "35666777", "obra_social": 5}},
-  {"model": "app.paciente", "pk": 6, "fields": {"usuario": 7, "nombre": "Elena", "apellido": "Romero", "email": "elena.romero@example.com", "telefono": "2901-678901", "dni": "25777888", "obra_social": 6}}
+  {
+    "model": "app.paciente",
+    "pk": 1,
+    "fields": {
+      "usuario": 2,
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "email": "juan.perez@example.com",
+      "telefono": "2901-123456",
+      "dni": "30111222",
+      "obra_social": 1
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 2,
+    "fields": {
+      "usuario": 3,
+      "nombre": "María",
+      "apellido": "Gómez",
+      "email": "maria.gomez@example.com",
+      "telefono": "2901-234567",
+      "dni": "32222333",
+      "obra_social": 2
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 3,
+    "fields": {
+      "usuario": 4,
+      "nombre": "Pedro",
+      "apellido": "Sánchez",
+      "email": "pedro.sanchez@example.com",
+      "telefono": "2901-345678",
+      "dni": "28333444",
+      "obra_social": 3
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 4,
+    "fields": {
+      "usuario": 5,
+      "nombre": "Lucía",
+      "apellido": "Fernández",
+      "email": "lucia.fernandez@example.com",
+      "telefono": "2901-456789",
+      "dni": "40444555",
+      "obra_social": 4
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 5,
+    "fields": {
+      "usuario": 6,
+      "nombre": "Martín",
+      "apellido": "Díaz",
+      "email": "martin.diaz@example.com",
+      "telefono": "2901-567890",
+      "dni": "35666777",
+      "obra_social": 5
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 6,
+    "fields": {
+      "usuario": 7,
+      "nombre": "Elena",
+      "apellido": "Romero",
+      "email": "elena.romero@example.com",
+      "telefono": "2901-678901",
+      "dni": "25777888",
+      "obra_social": 6
+    }
+  },
+  {
+    "model": "app.paciente",
+    "pk": 9,
+    "fields": {
+      "usuario": 9,
+      "nombre": "paciente",
+      "apellido": "Romero",
+      "email": "paciente.romero@example.com",
+      "telefono": "2901-678901",
+      "dni": "12345679",
+      "obra_social": 6
+    }
+  }
 ]
