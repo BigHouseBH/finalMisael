@@ -11,6 +11,18 @@
                     <h4>Confirmar turno</h4>
                 </div>
                 <div class="card-body">
+
+                    <style>
+                        textarea {
+                            display: block;
+                            width: 100%;
+                            border-radius: 6px;
+                            field-sizing: content;
+                            /* Crece según lo que escribís */
+                            min-height: 40px;
+                            /* Altura inicial chiquita */
+                        }
+                    </style>
                     <p>Confirmá los datos del turno:</p>
 
                     <ul class="list-group mb-3">
@@ -18,9 +30,9 @@
                             <strong>Médico:</strong> Dr/a. {{ medico.apellido }}, {{ medico.nombre }}
                         </li>
                         {% if not es_admin %}
-                            <li class="list-group-item">
-                                <strong>Paciente:</strong> {{ paciente.nombre }} {{ paciente.apellido }}
-                            </li>
+                        <li class="list-group-item">
+                            <strong>Paciente:</strong> {{ paciente.nombre }} {{ paciente.apellido }}
+                        </li>
                         {% endif %}
                         <li class="list-group-item">
                             <strong>Fecha y hora:</strong> {{ fecha_hora|date:"d/m/Y H:i" }}
@@ -31,46 +43,46 @@
                         {% csrf_token %}
 
                         {% if form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
                         {% endif %}
 
                         {% if es_admin %}
-                            <div class="mb-3">
-                                <label for="paciente_id" class="form-label">
-                                    Paciente <span class="text-danger">*</span>
-                                </label>
-                                <select name="paciente_id" id="paciente_id" class="form-select" required>
-                                    <option value="">— Seleccioná un paciente —</option>
-                                    {% for p in pacientes %}
-                                        <option value="{{ p.id }}">
-                                            {{ p.apellido }}, {{ p.nombre }} (DNI {{ p.dni }})
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <div class="mb-3">
+                            <label for="paciente_id" class="form-label">
+                                Paciente <span class="text-danger">*</span>
+                            </label>
+                            <select name="paciente_id" id="paciente_id" class="form-select" required>
+                                <option value="">— Seleccioná un paciente —</option>
+                                {% for p in pacientes %}
+                                <option value="{{ p.id }}">
+                                    {{ p.apellido }}, {{ p.nombre }} (DNI {{ p.dni }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         {% endif %}
-
+                        <!-- bucle formulario -->
                         {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">
-                                    {{ field.label }}
-                                    {% if field.field.required %}
-                                        <span class="text-danger">*</span>
-                                    {% endif %}
-                                </label>
-                                {{ field }}
-                                {% if field.errors %}
-                                    <div class="text-danger small">
-                                        {% for error in field.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                <span class="text-danger">*</span>
                                 {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                            <div class="text-danger small">
+                                {% for error in field.errors %}
+                                {{ error }}
+                                {% endfor %}
                             </div>
+                            {% endif %}
+                        </div>
                         {% endfor %}
 
                         <div class="d-flex justify-content-between">
