@@ -15,49 +15,58 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav ms-auto">
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:lista_medicos' %}">Médicos</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'lista_medicos' %}active{% endif %}"
+              href="{% url 'app:lista_medicos' %}">Médicos</a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:lista_turnos' %}">Turnos</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'lista_turnos' %}active{% endif %}"
+              href="{% url 'app:lista_turnos' %}">Turnos</a>
           </li>
 
           {% if user.is_staff or user.paciente %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:seleccionar_especialidad' %}">Pedir Turno</a>
+            <a class="nav-link {% if request.resolver_match.url_name in 'seleccionar_especialidad medicos_disponibles turnos_disponibles confirmar_turno' %}active{% endif %}"
+              href="{% url 'app:seleccionar_especialidad' %}">Pedir Turno</a>
           </li>
           {% endif %}
 
           {% if perms.app.view_paciente %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:lista_pacientes' %}">Pacientes</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'lista_pacientes' %}active{% endif %}"
+              href="{% url 'app:lista_pacientes' %}">Pacientes</a>
           </li>
           {% endif %}
 
           <!-- Recordatorios (solo pacientes) -->
           {% if not user.is_staff and user.paciente %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:recordatorios' %}">Recordatorios</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'recordatorios' %}active{% endif %}"
+              href="{% url 'app:recordatorios' %}">Recordatorios</a>
           </li>
           {% endif %}
 
           {% if perms.app.view_ausencia %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:lista_ausencias' %}">Ausencias</a>
+            <a class="nav-link {% if request.resolver_match.url_name in 'lista_ausencias nueva_ausencia' %}active{% endif %}"
+              href="{% url 'app:lista_ausencias' %}">Ausencias</a>
           </li>
           {% endif %}
 
           {% if not user.is_staff and user.paciente %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'app:perfil_usuario' %}">Mi Perfil</a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'perfil_usuario' %}active{% endif %}"
+              href="{% url 'app:perfil_usuario' %}">Mi Perfil</a>
           </li>
           {% endif %}
 
           <li class="nav-item">
-            <span class="nav-link disabled text-white">Hola {{ user.username }} </span>
+            <span class="nav-link text-white fw-bold">Hola {{ user.username }}</span>
           </li>
 
           <li class="nav-item">
