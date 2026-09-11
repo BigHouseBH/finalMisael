@@ -23,6 +23,7 @@ class Turno(models.Model):
         (NO_ASISTIO, "No asistió"),
     ]
     
+    #QUiero destacar la esta redundancia identificada entre 'estado' y 'asistio'; se preserva el contrato para evitar fallos en módulos dependientes. (falla en cascada)
     asistio = models.BooleanField(
         null=True,
         blank=True,
