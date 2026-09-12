@@ -147,13 +147,31 @@
     "model": "auth.user",
     "pk": 9,
     "fields": {
-      "password": "pbkdf2_sha256$870000$dUQ30vSMRRPXUZYlaNYVEQ$nqMCUAGsPM3hlaKW2R7to3LJfXEr0AbQciucFrh6cXo=",
+      "password": "pbkdf2_sha256$870000$quRzrQrKobhQTfz9Z8sSlj$hzE5d0LXM04E5NLKW7WNAV0tfFBon6/bJ3wbU6f2ZHU=",
       "last_login": null,
       "is_superuser": false,
       "username": "paciente",
       "first_name": "Usuario",
       "last_name": "Prueba",
       "email": "usuario@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-01-01T00:00:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$quRzrQrKobhQTfz9Z8sSlj$hzE5d0LXM04E5NLKW7WNAV0tfFBon6/bJ3wbU6f2ZHU=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "medico",
+      "first_name": "Medico",
+      "last_name": "X",
+      "email": "medico@example.com",
       "is_staff": false,
       "is_active": true,
       "date_joined": "2026-01-01T00:00:00Z",

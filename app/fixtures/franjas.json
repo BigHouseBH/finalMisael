@@ -33,5 +33,10 @@
   {"model": "app.franjahoraria", "pk": 32, "fields": {"medico": 7, "dia_semana": 1, "hora_inicio": "09:00", "hora_fin": "17:00"}},
   {"model": "app.franjahoraria", "pk": 33, "fields": {"medico": 7, "dia_semana": 2, "hora_inicio": "09:00", "hora_fin": "17:00"}},
   {"model": "app.franjahoraria", "pk": 34, "fields": {"medico": 7, "dia_semana": 3, "hora_inicio": "09:00", "hora_fin": "17:00"}},
-  {"model": "app.franjahoraria", "pk": 35, "fields": {"medico": 7, "dia_semana": 4, "hora_inicio": "09:00", "hora_fin": "17:00"}}
+  {"model": "app.franjahoraria", "pk": 35, "fields": {"medico": 7, "dia_semana": 4, "hora_inicio": "09:00", "hora_fin": "17:00"}},
+  {"model": "app.franjahoraria", "pk": 36, "fields": {"medico": 10, "dia_semana": 0, "hora_inicio": "09:00", "hora_fin": "17:00"}},
+  {"model": "app.franjahoraria", "pk": 37, "fields": {"medico": 10, "dia_semana": 1, "hora_inicio": "09:00", "hora_fin": "17:00"}},
+  {"model": "app.franjahoraria", "pk": 38, "fields": {"medico": 10, "dia_semana": 2, "hora_inicio": "09:00", "hora_fin": "17:00"}},
+  {"model": "app.franjahoraria", "pk": 39, "fields": {"medico": 10, "dia_semana": 3, "hora_inicio": "09:00", "hora_fin": "17:00"}},
+  {"model": "app.franjahoraria", "pk": 40, "fields": {"medico": 10, "dia_semana": 4, "hora_inicio": "09:00", "hora_fin": "17:00"}}
 ]

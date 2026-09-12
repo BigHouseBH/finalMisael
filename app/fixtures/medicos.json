@@ -1,9 +1,83 @@
 [
-  {"model": "app.medico", "pk": 1, "fields": {"nombre": "Ana", "apellido": "García", "matricula": "MP-1001", "especialidad": 1}},
-  {"model": "app.medico", "pk": 2, "fields": {"nombre": "Carlos", "apellido": "López", "matricula": "MP-1002", "especialidad": 2}},
-  {"model": "app.medico", "pk": 3, "fields": {"nombre": "Sofía", "apellido": "Martínez", "matricula": "MP-1003", "especialidad": 3}},
-  {"model": "app.medico", "pk": 4, "fields": {"nombre": "Juan", "apellido": "Pérez", "matricula": "MP-1004", "especialidad": 1}},
-  {"model": "app.medico", "pk": 5, "fields": {"nombre": "Lucía", "apellido": "Rodríguez", "matricula": "MP-1005", "especialidad": 4}},
-  {"model": "app.medico", "pk": 6, "fields": {"nombre": "Diego", "apellido": "Fernández", "matricula": "MP-1006", "especialidad": 5}},
-  {"model": "app.medico", "pk": 7, "fields": {"nombre": "Elena", "apellido": "Torres", "matricula": "MP-1007", "especialidad": 7}}
+  {
+    "model": "app.medico",
+    "pk": 1,
+    "fields": {
+      "nombre": "Ana",
+      "apellido": "García",
+      "matricula": "MP-1001",
+      "especialidad": 1
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 2,
+    "fields": {
+      "nombre": "Carlos",
+      "apellido": "López",
+      "matricula": "MP-1002",
+      "especialidad": 2
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 3,
+    "fields": {
+      "nombre": "Sofía",
+      "apellido": "Martínez",
+      "matricula": "MP-1003",
+      "especialidad": 3
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 4,
+    "fields": {
+      "nombre": "Juan",
+      "apellido": "Pérez",
+      "matricula": "MP-1004",
+      "especialidad": 1
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 5,
+    "fields": {
+      "nombre": "Lucía",
+      "apellido": "Rodríguez",
+      "matricula": "MP-1005",
+      "especialidad": 4
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 6,
+    "fields": {
+      "nombre": "Diego",
+      "apellido": "Fernández",
+      "matricula": "MP-1006",
+      "especialidad": 5
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 7,
+    "fields": {
+      "nombre": "Elena",
+      "apellido": "Torres",
+      "matricula": "MP-1007",
+      "especialidad": 7
+    }
+  },
+  {
+    "model": "app.medico",
+    "pk": 10,
+    "fields": {
+      "usuario": 10,
+      "nombre": "medico",
+      "apellido": "X",
+      "matricula": "MP-10010",
+      "especialidad": 7
+    }
+  }
 ]
