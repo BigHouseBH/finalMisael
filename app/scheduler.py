@@ -22,5 +22,3 @@ scheduler.add_job(
     id='generar_recordatorios_diarios',
     replace_existing=True
 )
-
-scheduler.start()
